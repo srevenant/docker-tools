@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ -f .pkg/ENV ]; then
+    source .pkg/ENV
+elif [ -f .pkg/actions.json ]; then
+    env=$(action env)
+    if [ $? -gt 0 ]; then
+        echo "Has Reactor been installed? https://github.com/srevenant/reactor"
+        exit 1
+    fi
+    eval $env
+else
+    echo "Missing .env file"
+    exit 1
+fi
+
+ps=$(docker ps -a -f name=${DOCKER_NAME} --format="{{.ID}}")
+if [ -n "$ps" ]; then
+    echo "Cleaning up old containers for ${DOCKER_NAME}"
+    for img in $ps; do
+        docker rm -f $img
+    done
+fi
+
+if [ -e .pkg/docker-run ]; then
+    cmd_run=$(eval echo `cat .pkg/docker-run`)
+else
+    cmd_run="docker run --name=${DOCKER_NAME} -P ${DOCKER_IMAGE}"
+fi
+
+echo "Starting ${DOCKER_NAME}"
+
+cmd() {
+    printf "Execute:\n\n\t"
+    echo "$@"
+    printf "\n"
+    "$@"
+}
+
+cmd $cmd_run

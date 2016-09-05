@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ -f .pkg/ENV ]; then
+    source .pkg/ENV
+elif [ -f .pkg/actions.json ]; then
+    env=$(action env)
+    if [ $? -gt 0 ]; then
+        echo "Has Reactor been installed? https://github.com/srevenant/reactor"
+        exit 1
+    fi
+    eval $env
+else
+    echo "Missing .env file"
+    exit 1
+fi
+
+if [ -z "$DOCKER_IMAGE" ]; then
+    echo "No DOCKER_IMAGE defined"
+    exit 1
+fi
+
+cmd() {
+    printf "Execute:\n\n\t"
+    echo "$@"
+    printf "\n"
+    "$@"
+}
+
+cmd docker push $DOCKER_IMAGE
+

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+if [ -f .pkg/ENV ]; then
+    source .pkg/ENV
+elif [ -f .pkg/actions.json ]; then
+    env=$(action env)
+    if [ $? -gt 0 ]; then
+        echo "Has Reactor been installed? https://github.com/srevenant/reactor"
+        exit 1
+    fi
+    eval $env
+else
+    echo "Missing .env file"
+    exit 1
+fi
+
+if [ -z "$DOCKER_IMAGE" ]; then
+    echo "No DOCKER_IMAGE defined"
+    exit 1
+fi
+
+args=
+if [ -n "$NO_DOCKER_CACHE" ]; then
+    args="--no-cache"
+fi
+
+if [ -f .pkg/Dockerfile ]; then
+    args="$args -f .pkg/Dockerfile"
+elif [ -f Dockerfile ]; then
+    args="$args -f Dockerfile"
+fi
+
+for tag in $DOCKER_TAGS; do
+    args="$args -t $DOCKER_IMAGE:$tag"
+done
+
+ver=
+if [ -n "$PKG_VERSION" ]; then
+    ver="$PKG_VERSION"
+elif [ -n "$BUILD_VERSION" ]; then
+    ver="$BUILD_VERSION"
+fi
+
+if [ -n "$ver" ]; then
+    ver=":$ver"
+fi
+
+cmd() {
+    printf "Execute:\n\n\t"
+    echo "$@"
+    printf "\n"
+    "$@"
+}
+
+cmd docker build $args -t $DOCKER_IMAGE$ver .
+
