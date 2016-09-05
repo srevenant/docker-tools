@@ -17,11 +17,11 @@ Additionally you can just define DOCKER_TAGS at build time, and you can include 
 
 Commands:
 
-* _docker-build_ -- make a build using the current repo.  Dockerfile may be in current folder or in .pkg/Dockerfile.  Includes any variables on DOCKER_ARGS as --build-args
-* _docker-clean_ -- clean ALL images -- very destructive, use with care
-* _docker-images_ -- list all running containers matching the current repo, and all images
-* _docker-push_ -- push to docker
-* _docker-run_ -- run a docker container based on current repo.  Will terminate any currently running containers.  May override default run behavior with .pkg/docker-run file that is the alternate docker run command and args, with variables to be evaluated (i.e. $DOCKER_IMAGE)
-* _docker-build-run_ -- do a docker-build, followed immediately by a docker-run
-* _docker-shell_ -- pull up a shell on the current image
+* __docker-build__ -- make a build using the current repo.  Dockerfile may be in current folder or in .pkg/Dockerfile.  Includes any variables on DOCKER_ARGS as --build-args
+* __docker-clean__ -- clean ALL images -- very destructive, use with care
+* __docker-images__ -- list all running containers matching the current repo, and all images
+* __docker-push__ -- push to docker
+* __docker-run__ -- run a docker container based on current repo.  Will terminate any currently running containers.  May override default run behavior with .pkg/docker-run file that is the alternate docker run command and args, with variables to be evaluated (i.e. $DOCKER_IMAGE)
+* __docker-build-run__ -- do a docker-build, followed immediately by a docker-run
+* __docker-shell__ -- pull up a shell on the current image
 
