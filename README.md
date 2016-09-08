@@ -2,7 +2,7 @@ A few tools to ease the use of docker locally.
 
 Download & Install with:
 
-	curl -sLO https://raw.github.com/srevenant/docker-tools/master/.get.sh && bash ./get.sh && rm get.sh
+	curl -sLO https://raw.github.com/srevenant/docker-tools/master/.get.sh && bash ./.get.sh && rm .get.sh
 
 This will download the tools into ~/.docker-tools/bin and add it to your path.
 
