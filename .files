@@ -1,0 +1,7 @@
+docker-build
+docker-build-run
+docker-clean
+docker-images
+docker-push
+docker-run
+docker-shell
