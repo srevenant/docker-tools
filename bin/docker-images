@@ -10,7 +10,7 @@ elif [ -f .pkg/actions.json ]; then
     fi
     eval $env
 else
-    echo "Missing .env file"
+    echo "Missing .pkg/ENV file"
     exit 1
 fi
 
