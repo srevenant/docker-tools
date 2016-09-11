@@ -10,7 +10,7 @@ elif [ -f .pkg/actions.json ]; then
     fi
     eval $env
 else
-    echo "Missing .pkg/ENV file"
+    echo "Missing .pkg/ENV or .pkg/actions.json... https://github.com/srevenant/docker-tools"
     exit 1
 fi
 

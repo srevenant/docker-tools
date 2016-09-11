@@ -10,7 +10,7 @@ elif [ -f .pkg/actions.json ]; then
     fi
     eval $env
 else
-    echo "Missing .pkg/ENV file"
+    echo "Missing .pkg/ENV or .pkg/actions.json... https://github.com/srevenant/docker-tools"
     exit 1
 fi
 
@@ -32,8 +32,15 @@ echo "Starting ${DOCKER_NAME}"
 
 cmd() {
     printf "Execute:\n\n\t"
-    echo "$@"
-    printf "\n"
+	space_rx="\s"
+	for arg in "$@"; do
+        if [[ $arg =~ $space_rx ]]; then
+			echo -n ' "'$arg'"'
+        else
+			echo -n " $arg"
+		fi
+	done
+    echo ""
     "$@"
 }
 
