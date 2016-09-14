@@ -122,7 +122,6 @@ fi
 cd $base
 rm -rf bin
 mkdir bin
-cd bin
 
 gitraw=https://raw.github.com/srevenant/docker-tools/master/
 dlurl=https://github.com/srevenant/docker-tools/archive/$version.tar.gz

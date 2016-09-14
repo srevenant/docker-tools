@@ -1,7 +1,7 @@
-docker-build
-docker-build-run
-docker-clean
-docker-images
-docker-push
-docker-run
-docker-shell
+bin/docker-build
+bin/docker-build-run
+bin/docker-clean
+bin/docker-images
+bin/docker-push
+bin/docker-run
+bin/docker-shell
