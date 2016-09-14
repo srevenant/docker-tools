@@ -137,7 +137,7 @@ sed -io -e '/#DOCKER-TOOLS-PATH/d' $profile
 echo "export PATH=\$PATH:$base/bin #DOCKER-TOOLS-PATH" >> $profile
 
 echo ""
-echo "Done installing"
+echo "Done installing.  Please reload your shell to get the new PATH."
 echo ""
 
 } # this ensures the entire script is downloaded #
