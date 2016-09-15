@@ -127,7 +127,7 @@ gitraw=https://raw.github.com/srevenant/docker-tools/master/
 dlurl=https://github.com/srevenant/docker-tools/archive/$version.tar.gz
 
 files=$(download -s $gitraw/.files)
-
+echo "f=$files"
 for f in $files; do
 	echo $f...
 	download -s $gitraw/$f -o $f
