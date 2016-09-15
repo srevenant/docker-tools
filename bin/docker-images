@@ -1,18 +1,5 @@
 #!/bin/bash
 
-if [ -f .pkg/ENV ]; then
-    source .pkg/ENV
-elif [ -f .pkg/actions.json ]; then
-    env=$(action env)
-    if [ $? -gt 0 ]; then
-        echo "Has Reactor been installed? https://github.com/srevenant/reactor"
-        exit 1
-    fi
-    eval $env
-else
-    echo "Missing .pkg/ENV or .pkg/actions.json... https://github.com/srevenant/docker-tools"
-    exit 1
-fi
 echo docker ps -a -f name=${DOCKER_NAME}
 
 echo "--- Containers"
