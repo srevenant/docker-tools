@@ -1,6 +1,6 @@
 bin/docker-build
 bin/docker-build-run
-bin/docker-clean
+bin/docker-purge
 bin/docker-images
 bin/docker-push
 bin/docker-run
