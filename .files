@@ -5,3 +5,4 @@ bin/docker-images
 bin/docker-push
 bin/docker-run
 bin/docker-shell
+bin/docker-tools-update
