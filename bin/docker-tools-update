@@ -127,7 +127,6 @@ gitraw=https://raw.github.com/srevenant/docker-tools/master/
 dlurl=https://github.com/srevenant/docker-tools/archive/$version.tar.gz
 
 files=$(download -s $gitraw/.files)
-echo "f=$files"
 for f in $files; do
 	echo $f...
 	download -s $gitraw/$f -o $f
@@ -140,6 +139,8 @@ echo "export PATH=\$PATH:$base/bin #DOCKER-TOOLS-PATH" >> $profile
 
 echo ""
 echo "Done installing.  Please reload your shell to get the new PATH."
+echo ""
+echo "Run 'docker-tools-update' to get a newer version."
 echo ""
 
 } # this ensures the entire script is downloaded #
