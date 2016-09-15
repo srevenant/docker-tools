@@ -140,7 +140,7 @@ echo "export PATH=\$PATH:$base/bin #DOCKER-TOOLS-PATH" >> $profile
 echo ""
 echo "Done installing.  Please reload your shell to get the new PATH."
 echo ""
-echo "Run 'docker-tools-update' to get a newer version."
+echo "In the future, run 'docker-tools-update' to get updates."
 echo ""
 
 } # this ensures the entire script is downloaded #
