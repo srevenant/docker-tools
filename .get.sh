@@ -129,6 +129,7 @@ dlurl=https://github.com/srevenant/docker-tools/archive/$version.tar.gz
 files=$(download -s $gitraw/.files)
 for f in $files; do
 	download -s $gitraw/$f -o $f
+	echo $f
 	chmod 755 $f
 done
 
