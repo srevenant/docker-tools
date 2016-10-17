@@ -25,7 +25,8 @@ Additionally you can just define DOCKER_TAGS at build time, and you can include 
 Commands:
 
 * __docker-build__ -- make a build using the current repo.  Dockerfile may be in current folder or in .pkg/Dockerfile.  Includes any variables on DOCKER_ARGS as --build-args
-* __docker-purge__ -- clean ALL images -- very destructive, use with care
+* __docker-clean__ -- cleans all containers that have run and are now in an exit status
+* __docker-purge__ -- clean ALL containers and images -- very destructive, use with care
 * __docker-images__ -- list all running containers matching the current repo, and all images
 * __docker-push__ -- push to docker
 * __docker-run__ -- run a docker container based on current repo.  Will terminate any currently running containers.  May override default run behavior with .pkg/docker-run file that is the alternate docker run command and args, with variables to be evaluated (i.e. $DOCKER_IMAGE)
