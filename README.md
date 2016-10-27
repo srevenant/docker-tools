@@ -26,6 +26,7 @@ Commands
 
 Most commands will print out the actions they are taking, for helpful learning.
 
+* __docker-tools-update__ -- pull latest version
 * __docker-build__ -- make a build using the current repo.  Dockerfile may be in current folder or in .pkg/Dockerfile.  Includes any variables on DOCKER_ARGS as --build-args
 * __docker-clean__ -- cleans all containers that have run and are now in an exit status, and any container images which are dangling (untagged).
 * __docker-clean-aged__ -- cleans all container images which are dangling, and any images over "age" old.  Errors are okay, as it does not force and any dependencies will not be removed.  *requires perl* and will try to install a perl dependency when run (works currently in redhat7/centos7/fedora23+).
