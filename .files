@@ -2,6 +2,7 @@ bin/docker-build
 bin/docker-build-run
 bin/docker-purge
 bin/docker-clean
+bin/docker-clean-aged
 bin/docker-images
 bin/docker-push
 bin/docker-run

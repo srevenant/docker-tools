@@ -1,0 +1,99 @@
+#!/bin/perl
+#
+# Copyright 2016 Brandon Gillespie
+# Licensed for use by AGPL
+#
+# Cleans aged and untagged images.i
+# Errors are okay--if there are dependencies it does not force the cleaning
+#
+# requirements (Fedora):
+#
+#   perl-DateTime-Format-DateParse.noarch
+#
+# cpan:
+# 
+#   cpan install DateTime::Format::DateParse
+
+###############################################################################
+# see if we can bring the pkg in before running
+BEGIN {
+	# what modules do we care about, which are often not installed, and how to install them?
+	my $modules = {
+        'DateTime::Format::DateParse' => { 'rhel7' => 'perl-DateTime-Format-DateParse' },
+    };
+
+	my $error = 0;
+	for my $m (keys %$modules) {
+		eval "use $m;";
+		if ($@) {
+			print "--> Cannot find module $m\n";
+			if ($modules->{$m}->{'rhel7'}) {
+				print STDERR "--> Attempting install of '$modules->{$m}->{'rhel7'}'\n";
+				system("yum", "-y", "install", $modules->{$m}->{'rhel7'});
+			}
+		}
+		eval "use $m;";
+		if ($@) {
+			$error++;
+		}
+	}
+
+	# if we cannot get our pre-requisites going, abort
+	if ($error) {
+		print "--> Unable to load requisite modules, aborting!\n";
+		exit;
+	}
+}
+
+use strict;
+use DateTime::Format::DateParse;
+
+print "--> Cleaning dangling images...\n";
+system("docker rmi \$(docker images -f dangling=true -q)");
+
+print "--> Cleaning old images...\n";
+my $images = {};
+open(DOCKER, "docker images --format '{{.ID}}\f{{.Repository}}\f{{.Tag}}\f{{.CreatedAt}}'|") || die("Cannot open docker: $!");
+while (<DOCKER>) {
+	chomp;
+	my ($id, $repo, $tag, $datestr) = split(/\f/);
+	my $date = DateTime::Format::DateParse->parse_datetime($datestr);
+	$images->{$id} = {
+		't' => $date->epoch(),
+        'repo' => $repo,
+        'tag' => $tag,
+        'ref' => "$repo:$tag",
+    };
+}
+
+my $aged = time()-(86400*14);
+my $max1 = 0;
+my $max2 = 0;
+for my $img (keys %$images) {
+	if (length($images->{$img}->{'repo'}) > $max1) {
+        $max1 = length($images->{$img}->{'repo'});
+	}
+	if (length($images->{$img}->{'tag'}) > $max2) {
+        $max2 = length($images->{$img}->{'tag'});
+	}
+}
+
+my @remove = ();
+for my $img (sort {$images->{$a}->{'t'} <=> $images->{$b}->{'t'}} keys %$images) {
+	my $age = $images->{$img}->{'t'};
+	printf "$img %${max1}s:%-${max2}s " . scalar(localtime($images->{$img})),
+        $images->{$img}->{'repo'},
+        $images->{$img}->{'tag'};
+	if ($age < $aged) {
+		push(@remove, $img);
+		print " will remove\n";
+	} else {
+		print " keeping\n";
+	}
+}
+
+for my $img (@remove) {
+	print("removing $img: \n");
+	system("docker", "rmi", $img);
+}
+
