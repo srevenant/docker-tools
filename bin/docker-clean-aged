@@ -48,10 +48,13 @@ BEGIN {
 use strict;
 use DateTime::Format::DateParse;
 
-print "--> Cleaning dangling images...\n";
-system("docker rmi \$(docker images -f dangling=true -q)");
+print("Cleaning dangling images...\n");
+my @imgs = split(/\n/, `docker images -f dangling=true -q 2>/dev/null`);
+if (@imgs) {
+	system("docker rmi " . join(" ", @imgs));
+}
 
-print "--> Cleaning old images...\n";
+print("Cleaning old images...\n");
 my $images = {};
 open(DOCKER, "docker images --format '{{.ID}}\f{{.Repository}}\f{{.Tag}}\f{{.CreatedAt}}'|") || die("Cannot open docker: $!");
 while (<DOCKER>) {
@@ -81,19 +84,19 @@ for my $img (keys %$images) {
 my @remove = ();
 for my $img (sort {$images->{$a}->{'t'} <=> $images->{$b}->{'t'}} keys %$images) {
 	my $age = $images->{$img}->{'t'};
-	printf "$img %${max1}s:%-${max2}s " . scalar(localtime($images->{$img})),
+	printf("$img %${max1}s:%-${max2}s " . scalar(localtime($images->{$img})),
         $images->{$img}->{'repo'},
-        $images->{$img}->{'tag'};
+        $images->{$img}->{'tag'});
 	if ($age < $aged) {
 		push(@remove, $img);
-		print " will remove\n";
+		print(" will remove\n");
 	} else {
-		print " keeping\n";
+		print(" keeping\n");
 	}
 }
 
 for my $img (@remove) {
 	print("removing $img: \n");
-	system("docker", "rmi", $img);
+	system("docker rmi $img 2>&1");
 }
 

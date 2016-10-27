@@ -37,3 +37,11 @@ Most commands will print out the actions they are taking, for helpful learning.
 * __docker-build-run__ -- do a docker-build, followed immediately by a docker-run
 * __docker-shell__ -- pull up a shell on the current image
 
+Advanced Tools
+--------------
+
+To support a build environment with ephemeral slaves (such as Jenkins), with systemd and docker-1.12, the following scripts also exist.  The assumption these scripts make is that `/docker` is a shared (nfs) mount point, and docker graph/meta data is stored at `/docker/{job}` unique to each job.
+
+* __docker-adm.sh__ -- meant to be called from a build job, to startup docker for that job. Run as `sudo docker-adm.sh start JOBNAME`, and `sudo docker-adm.sh stop`
+* __docker-clean-groupshared-cron__ -- meant to be called from cron, rolls through each of the grouped docker job base folders and runs docker-clean-aged on them.  Deals with concurrency issues as well.
+
