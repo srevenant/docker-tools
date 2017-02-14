@@ -1,5 +1,10 @@
 #!/bin/bash
 
+declare -a args
+for arg in "$@"; do
+	args[${#args[*]}]="$arg"
+done
+
 if [ -f .pkg/ENV ]; then
     source .pkg/ENV
 elif [ -f .pkg/actions.json ]; then
@@ -19,12 +24,14 @@ if [ -z "$DOCKER_IMAGE" ]; then
     exit 1
 fi
 
-declare -a args
 if [ -n "$NO_DOCKER_CACHE" ]; then
 	args[${#args[*]}]="--no-cache"
 fi
 
-if [ -f .pkg/Dockerfile ]; then
+defined=$(printf -- '%s\n' "${args[@]}" | grep -e -f)
+if [ $defined ]; then
+	echo "-f already defined"
+elif [ -f .pkg/Dockerfile ]; then
 	args=( "${args[@]}" "-f" ".pkg/Dockerfile" )
 elif [ -f Dockerfile ]; then
 	args=( "${args[@]}" "-f" "Dockerfile" )
