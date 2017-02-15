@@ -16,7 +16,7 @@ elif [ -f .pkg/actions.json ]; then
     eval $env
 else
     echo "Missing .pkg/ENV or .pkg/actions.json... https://github.com/srevenant/docker-tools"
-	DOCKER_IMAGE=$(basename $(pwd)|sed -e 's/[^a-z]*//')
+	DOCKER_IMAGE=$(basename $(pwd)|sed -e 's/[^a-z]*//g')
 	echo "Using DOCKER_IMAGE=$DOCKER_IMAGE"
 fi
 
