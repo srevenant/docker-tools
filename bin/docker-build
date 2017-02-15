@@ -1,28 +1,11 @@
 #!/bin/bash
 
-declare -a args
-for arg in "$@"; do
-	args[${#args[*]}]="$arg"
-done
-
-if [ -f .pkg/ENV ]; then
-    source .pkg/ENV
-elif [ -f .pkg/actions.json ]; then
-    env=$(action env)
-    if [ $? -gt 0 ]; then
-        echo "Has Reactor been installed? https://github.com/srevenant/reactor"
-        exit 1
-    fi
-    eval $env
-else
-    echo "Missing .pkg/ENV or .pkg/actions.json... https://github.com/srevenant/docker-tools"
-    exit 1
+tools=$(dirname $0)/docker-tools.sh
+if [ ! -f $tools ]; then
+    echo "Cannot find docker-tools.sh"
+	exit 1
 fi
-
-if [ -z "$DOCKER_IMAGE" ]; then
-    echo "No DOCKER_IMAGE defined"
-    exit 1
-fi
+source $tools
 
 if [ -n "$NO_DOCKER_CACHE" ]; then
 	args[${#args[*]}]="--no-cache"
@@ -56,20 +39,6 @@ fi
 if [ -n "$ver" ]; then
     ver=":$ver"
 fi
-
-cmd() {
-    printf "Execute:\n\n\t"
-	space_rx="\s"
-	for arg in "$@"; do
-        if [[ $arg =~ $space_rx ]]; then
-			echo -n ' "'$arg'"'
-        else
-			echo -n " $arg"
-		fi
-	done
-    echo ""
-    "$@"
-}
 
 cmd docker build "${args[@]}" -t $DOCKER_IMAGE$ver .
 

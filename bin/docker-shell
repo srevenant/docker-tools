@@ -1,18 +1,11 @@
 #!/bin/bash
 
-if [ -f .pkg/ENV ]; then
-    source .pkg/ENV
-elif [ -f .pkg/actions.json ]; then
-    env=$(action env)
-    if [ $? -gt 0 ]; then
-        echo "Has Reactor been installed? https://github.com/srevenant/reactor"
-        exit 1
-    fi
-    eval $env
-else
-    echo "Missing .pkg/ENV or .pkg/actions.json... https://github.com/srevenant/docker-tools"
+tools=$(dirname $0)/docker-tools.sh
+if [ ! -f $tools ]; then
+    echo "Cannot find docker-tools.sh"
     exit 1
 fi
+source $tools
 
 containers=$(docker ps -a -f name=${DOCKER_NAME} --format="{{.ID}}")
 if [ -n "$containers" ]; then
@@ -29,5 +22,5 @@ fi
 if [ -z "$containers" ]; then
     echo "No running container for ${DOCKER_NAME}" 1>&2
 else
-    exec docker exec -i -t $containers /bin/bash
+    exec docker exec -i -t $containers /bin/sh
 fi
