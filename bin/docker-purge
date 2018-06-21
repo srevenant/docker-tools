@@ -7,24 +7,21 @@ if [ $DOCKER_HOST ]; then
     exit 1
 fi
 
-clean_containers() {
-    arg=$1
-    containers=$(docker ps -a -q)
-    if [ -n "$containers" ]; then
-        docker rm $arg $containers
-    fi
-}
-
-clean_images() {
-    arg=$1
-    images=$(docker images -q)
+clean_all() {
+    clean="$1"
+    shift
+    images=$(docker "$@" --format '{{.ID}}')
     if [ -n "$images" ]; then
-        docker rmi $arg $images
+        docker $clean $images
     fi
 }
 
-clean_containers
-clean_containers -f
+clean_all rm ps -a -q
 
-clean_images
-clean_images -f
+#clean_all rmi images -q
+
+docker system prune -a -f
+docker volume prune -f
+
+#clean_all "volume rm" volume ls
+

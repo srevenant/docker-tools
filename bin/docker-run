@@ -18,7 +18,7 @@ fi
 if [ -e .pkg/docker-run ]; then
     cmd_run=$(eval echo `cat .pkg/docker-run`)
 else
-    cmd_run="docker run --name=${DOCKER_NAME} -P ${DOCKER_IMAGE}"
+    cmd_run="docker run $@ --name=${DOCKER_NAME} -P ${DOCKER_IMAGE}"
 fi
 
 echo "Starting ${DOCKER_NAME}"
